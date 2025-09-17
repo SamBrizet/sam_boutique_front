@@ -223,7 +223,7 @@ const Home = () => {
                   {section.links.map((link) => (
                     <li key={link}>
                       <a
-                        href="#" // Replace '#' with a valid URL or use a button if navigation is needed
+                        href="#" 
                         className="block text-gray-700 hover:text-rose-600 py-2 transition-colors"
                       >
                         {link}
