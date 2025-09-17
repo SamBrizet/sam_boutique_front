@@ -1,20 +1,15 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Heart, ShoppingBag, Search, Menu, X, Star, ArrowRight, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Heart, Star, ArrowRight } from 'lucide-react';
 import { toggleFavorite, loadFavorites } from '../store/favoritesSlice';
 import { API_URL } from '../constantes/constantes';
 
 const Home = () => {
-  const username = useSelector(state => state.auth.username);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const favorites = useSelector(state => state.favorites.items || []);
-  const loading = useSelector(state => state.favorites.loading);
-  
-
   const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const favorites = useSelector(state => state.favorites.items || []);
 
   const handleToggleFavorite = (id) => {
     dispatch(toggleFavorite(id)); // Dispatch the async thunk
@@ -228,8 +223,8 @@ const Home = () => {
                   {section.links.map((link) => (
                     <li key={link}>
                       <a
-                        href="#"
-                        className="text-gray-400 hover:text-white transition-colors"
+                        href="#" // Replace '#' with a valid URL or use a button if navigation is needed
+                        className="block text-gray-700 hover:text-rose-600 py-2 transition-colors"
                       >
                         {link}
                       </a>

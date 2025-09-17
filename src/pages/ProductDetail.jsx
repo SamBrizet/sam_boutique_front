@@ -9,7 +9,6 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const favorites = useSelector(state => state.favorites.items || []);
-  const loading = useSelector(state => state.favorites.loading);
   const dispatch = useDispatch();
 
   const handleToggleFavorite = (id) => {
