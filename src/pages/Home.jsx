@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Star, ArrowRight } from 'lucide-react';
+import { Heart, Star, ArrowRight, Instagram, Facebook, Twitter } from 'lucide-react';
 import { toggleFavorite, loadFavorites } from '../store/favoritesSlice';
 import { API_URL } from '../constantes/constantes';
 
