@@ -62,13 +62,18 @@ const Navigation = () => {
           <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-lg">
             <div className="px-4 py-4 space-y-4">
               {['Colecciones', 'Nueva Temporada', 'Ofertas', 'Nosotros'].map((item) => (
-                <a
+                <button
                   key={item}
-                  href="#" 
-                  className="block text-gray-700 hover:text-rose-600 py-2 transition-colors"
+                  type="button"
+                  onClick={() => {
+                    const path = `/${item.toLowerCase().replace(/\s+/g, '-')}`;
+                    navigate(path);
+                    setIsMenuOpen(false);
+                  }}
+                  className="block text-left w-full text-gray-700 hover:text-rose-600 py-2 transition-colors"
                 >
                   {item}
-                </a>
+                </button>
               ))}
             </div>
           </div>

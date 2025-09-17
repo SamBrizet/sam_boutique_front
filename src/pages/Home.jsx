@@ -222,12 +222,16 @@ const Home = () => {
                 <ul className="space-y-2">
                   {section.links.map((link) => (
                     <li key={link}>
-                      <a
-                        href="#" 
-                        className="block text-gray-700 hover:text-rose-600 py-2 transition-colors"
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const path = `/${link.toLowerCase().replace(/\s+/g, '-')}`;
+                          navigate(path);
+                        }}
+                        className="block w-full text-left text-gray-400 hover:text-white py-2 transition-colors"
                       >
                         {link}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
