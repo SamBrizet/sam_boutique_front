@@ -120,18 +120,18 @@ const Home = () => {
                     </span>
                   )}
                 </div>
-                                 <button
-                   onClick={() => handleToggleFavorite(product._id)}
-                   className="absolute top-4 right-4 p-2 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all duration-200"
-                 >
-                   <Heart
-                     className={`h-4 w-4 ${
-                       favorites.includes(product._id)
-                         ? 'text-rose-600 fill-current'
-                         : 'text-gray-600'
-                     }`}
-                   />
-                 </button>
+                <button
+                  onClick={() => handleToggleFavorite(product._id)}
+                  className="absolute top-4 right-4 p-2 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all duration-200 flex items-center justify-center"
+                >
+                  <Heart
+                    className={`h-4 w-4 ${
+                      favorites.includes(product._id)
+                        ? 'text-rose-600 fill-current'
+                        : 'text-gray-600'
+                    }`}
+                  />
+                </button>
                  
               </div>
 

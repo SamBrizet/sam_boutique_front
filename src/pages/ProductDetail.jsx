@@ -95,7 +95,7 @@ const ProductDetail = () => {
             />
             <button
               onClick={() => handleToggleFavorite(product._id)}
-              className="absolute top-4 right-4 p-3 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all"
+              className="absolute top-4 right-4 p-3 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all flex items-center justify-center"
             >
               <Heart
                 className={`h-5 w-5 ${
