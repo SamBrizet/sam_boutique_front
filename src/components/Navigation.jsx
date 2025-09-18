@@ -7,8 +7,8 @@ const Navigation = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-gradient-to-br from-rose-100 via-pink-50 to-orange-100">
-      <header className="relative bg-gradient-to-r from-white/95 via-rose-50/95 to-pink-50/95 backdrop-blur-md shadow-lg border-b border-rose-200">
+    <div className="bg-gradient-to-br from-rose-100 via-pink-50 to-orange-100 relative">
+      <header className="relative bg-gradient-to-r from-white/95 via-rose-50/95 to-pink-50/95 backdrop-blur-md shadow-lg border-b border-rose-200 z-40">
         <div className="absolute inset-0 bg-gradient-to-r from-rose-200/20 to-pink-200/20"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex justify-between items-center h-16">
@@ -57,27 +57,35 @@ const Navigation = () => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-lg z-50">
-            <div className="px-4 py-4 space-y-4">
-              {['Inicio', 'Favoritos', 'Ofertas', 'Nosotros'].map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => {
-                    const path = item === 'Inicio' ? '/' : `/${item.toLowerCase()}`;
-                    navigate(path);
-                    setIsMenuOpen(false);
-                  }}
-                  className="block text-left w-full text-gray-700 hover:text-rose-600 py-2 transition-colors"
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
+          <div 
+            className="md:hidden fixed inset-0 bg-black/20 z-40"
+            onClick={() => setIsMenuOpen(false)}
+          />
         )}
+        
+        {/* Mobile Menu */}
+        <div className={`md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-rose-100 shadow-lg z-50 transition-all duration-300 ease-in-out ${
+          isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'
+        }`}>
+          <div className="px-4 py-4 space-y-2">
+            {['Inicio', 'Favoritos', 'Ofertas', 'Nosotros'].map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => {
+                  const path = item === 'Inicio' ? '/' : `/${item.toLowerCase()}`;
+                  navigate(path);
+                  setIsMenuOpen(false);
+                }}
+                className="block text-left w-full text-gray-700 hover:text-rose-600 py-3 px-2 transition-colors border-b border-gray-100 last:border-b-0"
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
       </header>
     </div>
   );
