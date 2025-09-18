@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadFavorites } from '../store/favoritesSlice';
 import { getCart } from '../api/cart';
+import { getDeviceId } from "../utils/deviceId";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
