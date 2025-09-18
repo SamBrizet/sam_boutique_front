@@ -7,6 +7,8 @@ import { API_URL } from '../constantes/constantes';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favorites = useSelector(state => state.favorites.items || []);
@@ -18,11 +20,21 @@ const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const response = await fetch(`${API_URL}/products`);
+        
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
         setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
+        setError('Error al cargar los productos. Por favor, intenta de nuevo.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -62,8 +74,25 @@ const Home = () => {
 
       {/* Featured Products */}
       <section className="py-8 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {products.map((product) => (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rose-600 mb-4"></div>
+            <p className="text-gray-600 text-lg">Cargando productos...</p>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <p className="text-red-600 text-lg mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="bg-rose-600 text-white px-6 py-2 rounded-full hover:bg-rose-700 transition-colors"
+            >
+              Reintentar
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            {products.map((product) => (
             <div
               key={product._id}
               className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-rose-200/50 hover:border-pink-300"
@@ -152,8 +181,9 @@ const Home = () => {
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Newsletter Section */}
