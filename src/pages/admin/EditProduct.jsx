@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCategories } from '../../api/category';
 import { updateProduct } from '../../api/product';
+import { API_URL } from '../../constantes/constantes';
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/api/products/${id}`);
+        const response = await fetch(`${API_URL}/products/${id}`);
         const data = await response.json();
         setProduct(data);
         setMainImage(data.images[0]); // Default main image

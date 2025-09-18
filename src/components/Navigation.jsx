@@ -1,10 +1,19 @@
-import React, { useState} from 'react';
-import { ShoppingBag, Search, Menu, X} from 'lucide-react';
+import React, { useState, useEffect} from 'react';
+import { Heart, Menu, X} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadFavorites } from '../store/favoritesSlice';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const favorites = useSelector(state => state.favorites.items);
+  
+  // Cargar favoritos al montar el componente
+  useEffect(() => {
+    dispatch(loadFavorites());
+  }, [dispatch]);
 
   return (
     <div className="bg-gradient-to-br from-rose-100 via-pink-50 to-orange-100 relative">
@@ -38,14 +47,16 @@ const Navigation = () => {
 
             {/* Icons */}
             <div className="flex items-center space-x-4">
-              <button className="p-2 text-gray-600 hover:text-rose-600 transition-colors">
-                <Search className="h-5 w-5" />
-              </button>
-              <button className="p-2 text-gray-600 hover:text-rose-600 transition-colors relative">
-                <ShoppingBag className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  2
-                </span>
+              <button 
+                className="p-2 text-gray-600 hover:text-rose-600 transition-colors relative"
+                onClick={() => navigate('/favoritos')}
+              >
+                <Heart className="h-5 w-5" />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {favorites.length}
+                  </span>
+                )}
               </button>
               <button
                 className="md:hidden p-2 text-gray-600"
