@@ -3,9 +3,11 @@ import { Heart, Menu, X, ShoppingCart} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadFavorites } from '../store/favoritesSlice';
+import { getCart } from '../api/cart';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const favorites = useSelector(state => state.favorites.items);
@@ -14,6 +16,21 @@ const Navigation = () => {
   useEffect(() => {
     dispatch(loadFavorites());
   }, [dispatch]);
+
+  // Contar productos en el carrito
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const deviceId = getDeviceId();
+        const cartData = await getCart(deviceId);
+        setCartCount(cartData.length);
+      } catch (error) {
+        console.error("Error fetching cart count:", error);
+      }
+    };
+
+    fetchCartCount();
+  }, []);
 
   return (
     <div className="bg-gradient-to-br from-rose-100 via-pink-50 to-orange-100 relative">
@@ -63,6 +80,11 @@ const Navigation = () => {
                 onClick={() => navigate('/cart')}
               >
                 <ShoppingCart className="h-5 w-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                    {cartCount}
+                  </span>
+                )}
               </button>
               <button
                 className="md:hidden p-2 text-gray-600"

@@ -109,38 +109,27 @@ const Cart = () => {
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <ul className="divide-y divide-gray-200">
               {cart.map((item) => (
-                <li
-                  key={item.productId}
-                  className="flex items-center justify-between p-4"
-                >
+                <li key={item.productId} className="flex flex-col sm:flex-row items-center justify-between p-4">
                   <div className="flex items-center space-x-4">
                     <img
-                      src={item.image}
+                      src={item.image || "https://via.placeholder.com/100"}
                       alt={item.productName}
-                      className="w-16 h-16 rounded object-cover"
+                      className="w-16 h-16 sm:w-24 sm:h-24 rounded object-cover"
                     />
                     <div>
-                      <h2 className="text-lg font-medium text-gray-800">
-                        {item.productName}
-                      </h2>
-                      <p className="text-sm text-gray-500">
-                        Cantidad: {item.quantity}
-                      </p>
+                      <h2 className="text-lg font-medium text-gray-800">{item.productName}</h2>
+                      <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                     <button
-                      onClick={() =>
-                        handleUpdateQuantity(item.productId, item.quantity + 1)
-                      }
+                      onClick={() => handleUpdateQuantity(item.productId, item.quantity + 1)}
                       className="px-3 py-1 bg-rose-600 text-white rounded hover:bg-rose-700"
                     >
                       +
                     </button>
                     <button
-                      onClick={() =>
-                        handleUpdateQuantity(item.productId, item.quantity - 1)
-                      }
+                      onClick={() => handleUpdateQuantity(item.productId, item.quantity - 1)}
                       className="px-3 py-1 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
                     >
                       -
