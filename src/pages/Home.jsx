@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Star, ArrowRight, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Heart, Star, Instagram, Facebook, Twitter } from 'lucide-react';
 import { toggleFavorite, loadFavorites } from '../store/favoritesSlice';
 import { API_URL } from '../constantes/constantes';
 
@@ -59,10 +59,6 @@ const Home = () => {
             <p className="text-gray-600 text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">
               Descubre piezas únicas que definen tu estilo personal con la máxima elegancia y sofisticación.
             </p>
-            <button className="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-6 sm:px-8 py-3 rounded-full hover:from-pink-600 hover:to-orange-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center space-x-2 mx-auto sm:mx-0">
-              <span>Explorar Colección</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
         
@@ -221,13 +217,13 @@ const Home = () => {
               <p className="text-gray-400 mb-4">
                 Redefiniendo la elegancia con piezas únicas y atemporales.
               </p>
-              <div className="flex space-x-4">
+              <div className="flex justify-center items-center space-x-4">
                 {[Instagram, Facebook, Twitter].map((Icon, index) => (
                   <button
                     key={index}
-                    className="p-2 bg-gradient-to-r from-gray-800 to-gray-700 rounded-full hover:from-rose-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-110"
+                    className="p-4 bg-gradient-to-r from-gray-800 to-gray-700 rounded-full flex items-center justify-center hover:from-rose-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-110"
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className="h-6 w-6 text-white" />
                   </button>
                 ))}
               </div>
@@ -237,14 +233,6 @@ const Home = () => {
               {
                 title: 'Comprar',
                 links: ['Nueva Colección', 'Vestidos', 'Accesorios', 'Ofertas'],
-              },
-              {
-                title: 'Ayuda',
-                links: ['Contacto', 'Envíos', 'Devoluciones', 'Guía de Tallas'],
-              },
-              {
-                title: 'Empresa',
-                links: ['Nosotros', 'Carreras', 'Prensa', 'Sostenibilidad'],
               },
             ].map((section) => (
               <div key={section.title}>
