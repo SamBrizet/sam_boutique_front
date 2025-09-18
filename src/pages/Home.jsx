@@ -4,17 +4,32 @@ import { useNavigate } from 'react-router-dom';
 import { Heart, Star, Instagram, Facebook, Twitter } from 'lucide-react';
 import { toggleFavorite, loadFavorites } from '../store/favoritesSlice';
 import { API_URL } from '../constantes/constantes';
+import { addToCart } from "../api/cart";
+import { getDeviceId } from "../utils/deviceId";
+import Snackbar from "../components/Snackbar";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favorites = useSelector(state => state.favorites.items || []);
 
   const handleToggleFavorite = (id) => {
     dispatch(toggleFavorite(id)); // Dispatch the async thunk
+  };
+
+  const handleAddToCart = async (productId) => {
+    const deviceId = getDeviceId();
+    try {
+      await addToCart(deviceId, productId, 1);
+      setSnackbarMessage("Producto agregado al carrito");
+    } catch (error) {
+      console.error("Error al agregar al carrito", error);
+      setSnackbarMessage("Hubo un error al agregar el producto al carrito");
+    }
   };
 
   useEffect(() => {
@@ -172,7 +187,10 @@ const Home = () => {
                   ))}
                 </div>
 
-                <button className="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 sm:py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium transform hover:scale-105 mt-2 text-sm sm:text-base">
+                <button
+                  onClick={() => handleAddToCart(product._id)}
+                  className="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 sm:py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium transform hover:scale-105 mt-2 text-sm sm:text-base"
+                >
                   Agregar al Carrito
                 </button>
               </div>
@@ -262,6 +280,8 @@ const Home = () => {
           </div>
         </div>
       </footer>
+
+      <Snackbar message={snackbarMessage} onClose={() => setSnackbarMessage("")} />
     </div>
   );
 }

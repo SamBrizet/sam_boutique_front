@@ -4,6 +4,9 @@ import { ShoppingBag, Star, Heart } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFavorite, loadFavorites } from '../store/favoritesSlice';
 import { API_URL } from '../constantes/constantes';
+import { addToCart } from '../api/cart';
+import { getDeviceId } from '../utils/deviceId';
+import Snackbar from '../components/Snackbar';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -11,11 +14,23 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const favorites = useSelector(state => state.favorites.items || []);
   const dispatch = useDispatch();
 
   const handleToggleFavorite = (id) => {
     dispatch(toggleFavorite(id)); // Dispatch the async thunk
+  };
+
+  const handleAddToCart = async () => {
+    const deviceId = getDeviceId();
+    try {
+      await addToCart(deviceId, product._id, 1);
+      setSnackbarMessage("Producto agregado al carrito");
+    } catch (error) {
+      console.error("Error al agregar al carrito", error);
+      setSnackbarMessage("Hubo un error al agregar el producto al carrito");
+    }
   };
 
   useEffect(() => {
@@ -153,12 +168,16 @@ const ProductDetail = () => {
             <span className="font-semibold">Stock disponible:</span> {product.stock}
           </p>
 
-          <button className="flex items-center justify-center w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-3 sm:py-4 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg transform hover:scale-105 text-sm sm:text-base">
+          <button
+            onClick={handleAddToCart}
+            className="flex items-center justify-center w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-3 sm:py-4 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium shadow-lg transform hover:scale-105 text-sm sm:text-base"
+          >
             <ShoppingBag className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
             Agregar al carrito
           </button>
         </div>
       </div>
+      <Snackbar message={snackbarMessage} onClose={() => setSnackbarMessage("")} />
     </div>
   );
 };

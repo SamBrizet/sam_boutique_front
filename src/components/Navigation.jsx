@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { Heart, Menu, X} from 'lucide-react';
+import { Heart, Menu, X, ShoppingCart} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadFavorites } from '../store/favoritesSlice';
@@ -57,6 +57,12 @@ const Navigation = () => {
                     {favorites.length}
                   </span>
                 )}
+              </button>
+              <button 
+                className="p-2 text-gray-600 hover:text-rose-600 transition-colors relative flex items-center justify-center"
+                onClick={() => navigate('/cart')}
+              >
+                <ShoppingCart className="h-5 w-5" />
               </button>
               <button
                 className="md:hidden p-2 text-gray-600"

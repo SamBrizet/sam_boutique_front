@@ -9,6 +9,7 @@ import ProductDetail from './pages/ProductDetail';
 import FavoriteProducto from './pages/clientes/favoriteProducto';
 import ProductMaintenance from './pages/admin/ProductMaintenance.jsx';
 import EditProduct from './pages/admin/EditProduct.jsx';
+import Cart from './pages/Cart';
 function App() {
   return (
     <Router>
@@ -44,6 +45,11 @@ function App() {
           <MainLayoutAdmin>
             <EditProduct />
           </MainLayoutAdmin>
+        } />
+        <Route path="/cart" element={
+          <MainLayout>
+            <Cart />
+          </MainLayout>
         } />
       </Routes>
     </Router>
