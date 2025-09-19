@@ -59,16 +59,13 @@ const Cart = () => {
   };
 
   const handleRemoveItem = async (productId) => {
-    const previousCart = [...cart];
-    const updatedCart = cart.filter((item) => item.productId !== productId);
-    setCart(updatedCart);
-
     try {
       await removeFromCart(deviceId, productId);
+      const updatedCart = await getCart(deviceId); // Obtener el carrito actualizado desde el backend
+      setCart(updatedCart);
     } catch (err) {
       console.error("Error removing cart item:", err);
       alert("Error al eliminar el producto del carrito.");
-      setCart(previousCart); // Revert changes on error
     }
   };
 
