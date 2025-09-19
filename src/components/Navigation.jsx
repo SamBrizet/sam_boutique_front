@@ -37,6 +37,24 @@ const Navigation = () => {
     return () => clearInterval(interval); // Limpiar intervalo al desmontar
   }, []);
 
+  useEffect(() => {
+    const handleCartUpdate = async () => {
+      try {
+        const deviceId = getDeviceId();
+        const cartData = await getCart(deviceId);
+        setCartCount(cartData.length);
+      } catch (error) {
+        console.error("Error fetching cart count:", error);
+      }
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdate);
+
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
+  }, []);
+
   return (
     <div className="bg-gradient-to-br from-rose-100 via-pink-50 to-orange-100 relative">
       <header className="relative bg-gradient-to-r from-white/95 via-rose-50/95 to-pink-50/95 backdrop-blur-md shadow-lg border-b border-rose-200 z-40">
