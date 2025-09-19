@@ -18,24 +18,6 @@ const Navigation = () => {
     dispatch(loadFavorites());
   }, [dispatch]);
 
-  // Contar productos en el carrito
-  useEffect(() => {
-    const fetchCartCount = async () => {
-      try {
-        const deviceId = getDeviceId();
-        const cartData = await getCart(deviceId);
-        setCartCount(cartData.length);
-      } catch (error) {
-        console.error("Error fetching cart count:", error);
-      }
-    };
-
-    fetchCartCount();
-
-    const interval = setInterval(fetchCartCount, 5000); // Actualizar cada 5 segundos
-
-    return () => clearInterval(interval); // Limpiar intervalo al desmontar
-  }, []);
 
   useEffect(() => {
     const handleCartUpdate = async () => {

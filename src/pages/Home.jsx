@@ -15,7 +15,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [cart, setCart] = useState([]);
-  const [addingToCart, setAddingToCart] = useState(false);
+  const [addingToCart, setAddingToCart] = useState({});
   const [isMobile, setIsMobile] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const Home = () => {
 
   const handleAddToCart = async (productId) => {
     const deviceId = getDeviceId();
-    setAddingToCart(true); // Deshabilitar el botón
+    setAddingToCart((prevState) => ({ ...prevState, [productId]: true }));
     try {
       await addToCart(deviceId, productId, 1);
       setSnackbarMessage("Producto agregado al carrito");
@@ -39,7 +39,7 @@ const Home = () => {
       console.error("Error al agregar al carrito", error);
       setSnackbarMessage("Hubo un error al agregar el producto al carrito");
     } finally {
-      setAddingToCart(false); // Rehabilitar el botón
+      setAddingToCart((prevState) => ({ ...prevState, [productId]: false }));
     }
   };
 
@@ -229,12 +229,12 @@ const Home = () => {
 
                 <button
                   onClick={() => handleAddToCart(product._id)}
-                  disabled={addingToCart || isProductInCart(product._id)}
+                  disabled={addingToCart[product._id] || isProductInCart(product._id)}
                   className={`w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 sm:py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium transform hover:scale-105 mt-2 text-sm sm:text-base ${
-                    addingToCart || isProductInCart(product._id) ? "opacity-50 cursor-not-allowed" : ""
+                    addingToCart[product._id] || isProductInCart(product._id) ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  {isProductInCart(product._id) ? "Ya en el carrito" : addingToCart ? "Agregando..." : "Agregar al Carrito"}
+                  {isProductInCart(product._id) ? "Ya en el carrito" : addingToCart[product._id] ? "Agregando..." : "Agregar al Carrito"}
                 </button>
               </div>
             </div>
@@ -252,7 +252,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <div>
-              <h4 className="text-2xl font-serif bg-gradient-to-r from-rose-400 via-pink-400 to-orange-400 bg-clip-text text-transparent mb-4">Sam Boutique</h4>
+              <h4 className="text-2xl font-serif bg-gradient-to-r from-rose-400 via-pink-400 to-orange-400 bg-clip-text text-transparent mb-4">Brisa Boutique</h4>
               <p className="text-gray-400 mb-4">
                 Redefiniendo la elegancia con piezas únicas y atemporales.
               </p>
@@ -297,7 +297,7 @@ const Home = () => {
           </div>
 
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 Sam Boutique. Todos los derechos reservados.</p>
+            <p>&copy; 2025 Brisa Boutique. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>

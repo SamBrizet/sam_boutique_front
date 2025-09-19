@@ -9,6 +9,7 @@ import ProductDetail from './pages/ProductDetail';
 import FavoriteProducto from './pages/clientes/favoriteProducto';
 import ProductMaintenance from './pages/admin/ProductMaintenance.jsx';
 import EditProduct from './pages/admin/EditProduct.jsx';
+import SubscriptionsList from './pages/admin/SubscriptionsList.jsx';
 import Cart from './pages/Cart';
 function App() {
   return (
@@ -29,6 +30,11 @@ function App() {
         <Route path="/admin/products" element={
           <MainLayoutAdmin>
             <ProductMaintenance />
+          </MainLayoutAdmin>
+        } />
+        <Route path="/admin/subscriptions" element={
+          <MainLayoutAdmin>
+            <SubscriptionsList />
           </MainLayoutAdmin>
         } />
         <Route path="/producto/detail/:id" element={

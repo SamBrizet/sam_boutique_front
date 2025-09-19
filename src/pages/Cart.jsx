@@ -59,13 +59,16 @@ const Cart = () => {
   };
 
   const handleRemoveItem = async (productId) => {
+    const previousCart = [...cart];
+    const updatedCart = cart.filter((item) => item.productId !== productId);
+    setCart(updatedCart); // Quitar del front inmediatamente
+
     try {
-      await removeFromCart(deviceId, productId);
-      const updatedCart = await getCart(deviceId); // Obtener el carrito actualizado desde el backend
-      setCart(updatedCart);
+      await removeFromCart(deviceId, productId); // Realizar la eliminación en el backend
     } catch (err) {
       console.error("Error removing cart item:", err);
       alert("Error al eliminar el producto del carrito.");
+      setCart(previousCart); // Revertir cambios en caso de error
     }
   };
 
@@ -103,7 +106,7 @@ const Cart = () => {
                     <div>
                       <h2 className="text-lg font-medium text-gray-800">{item.productName}</h2>
                       <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
-                      <p className="text-sm text-gray-500">Precio: ${item.price}</p>
+                      <p className="text-sm text-gray-500">Precio: S/. {item.price}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 mt-4 sm:mt-0">
@@ -130,7 +133,7 @@ const Cart = () => {
               ))}
             </ul>
             <div className="p-4 text-right">
-              <h2 className="text-xl font-semibold text-gray-800">Total: ${calculateTotal()}</h2>
+              <h2 className="text-xl font-semibold text-gray-800">Total: S/. {calculateTotal()}</h2>
             </div>
           </div>
         )}

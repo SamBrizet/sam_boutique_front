@@ -25,7 +25,7 @@ const Navigation = () => {
                 onClick={() => navigate('/admin/dashboard')}
                 className="text-2xl font-serif bg-gradient-to-r from-rose-600 via-pink-600 to-orange-500 bg-clip-text text-transparent tracking-wide cursor-pointer"
               >
-                Sam Boutique
+                Brisa Boutique
               </h1>
             </div>
 
@@ -43,6 +43,13 @@ const Navigation = () => {
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-rose-600 group-hover:w-full transition-all duration-300"></span>
                 </button>
               ))}
+              <button
+                onClick={() => navigate('/admin/subscriptions')}
+                className="text-gray-700 hover:text-rose-600 px-3 py-2 text-sm font-medium transition-colors duration-200 relative group"
+              >
+                Suscripciones
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-rose-600 group-hover:w-full transition-all duration-300"></span>
+              </button>
             </nav>
 
             {/* Icons */}
