@@ -42,51 +42,37 @@ const Cart = () => {
   }, [deviceId]);
 
   const handleUpdateQuantity = async (productId, quantity) => {
+    const previousCart = [...cart];
+    const updatedCart = cart.map((item) =>
+      item.productId === productId ? { ...item, quantity } : item
+    );
+    setCart(updatedCart);
+
     try {
       await updateCartItem(deviceId, productId, quantity);
-      const cartData = await getCart(deviceId);
-      const updatedCart = await Promise.all(
-        cartData.map(async (item) => {
-          const productResponse = await axios.get(
-            `${process.env.REACT_APP_API_URL}/products/${item.productId}`
-          );
-          const product = productResponse.data;
-          return {
-            ...item,
-            productName: product.title,
-            image: product.images[0],
-          };
-        })
-      );
-      setCart(updatedCart);
     } catch (err) {
       console.error("Error updating cart item:", err);
       alert("Error al actualizar la cantidad del producto.");
+      setCart(previousCart); // Revert changes on error
     }
   };
 
   const handleRemoveItem = async (productId) => {
+    const previousCart = [...cart];
+    const updatedCart = cart.filter((item) => item.productId !== productId);
+    setCart(updatedCart);
+
     try {
       await removeFromCart(deviceId, productId);
-      const cartData = await getCart(deviceId);
-      const updatedCart = await Promise.all(
-        cartData.map(async (item) => {
-          const productResponse = await axios.get(
-            `${process.env.REACT_APP_API_URL}/products/${item.productId}`
-          );
-          const product = productResponse.data;
-          return {
-            ...item,
-            productName: product.title,
-            image: product.images[0],
-          };
-        })
-      );
-      setCart(updatedCart);
     } catch (err) {
       console.error("Error removing cart item:", err);
       alert("Error al eliminar el producto del carrito.");
+      setCart(previousCart); // Revert changes on error
     }
+  };
+
+  const calculateTotal = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   if (loading) {
@@ -119,6 +105,7 @@ const Cart = () => {
                     <div>
                       <h2 className="text-lg font-medium text-gray-800">{item.productName}</h2>
                       <p className="text-sm text-gray-500">Cantidad: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">Precio: ${item.price}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 mt-4 sm:mt-0">
@@ -144,6 +131,9 @@ const Cart = () => {
                 </li>
               ))}
             </ul>
+            <div className="p-4 text-right">
+              <h2 className="text-xl font-semibold text-gray-800">Total: ${calculateTotal()}</h2>
+            </div>
           </div>
         )}
       </div>
