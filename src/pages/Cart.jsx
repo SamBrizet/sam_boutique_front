@@ -26,6 +26,7 @@ const Cart = () => {
               ...item,
               productName: product.title,
               image: product.images[0],
+              price: product.price, // Asignar el precio del producto
             };
           })
         );

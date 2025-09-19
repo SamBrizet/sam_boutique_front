@@ -31,6 +31,10 @@ const Navigation = () => {
     };
 
     fetchCartCount();
+
+    const interval = setInterval(fetchCartCount, 5000); // Actualizar cada 5 segundos
+
+    return () => clearInterval(interval); // Limpiar intervalo al desmontar
   }, []);
 
   return (
