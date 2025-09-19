@@ -7,6 +7,10 @@ export const addToCart = async (deviceId, productId, quantity) => {
     productId,
     quantity,
   });
+
+  // Emitir evento cartUpdated
+  window.dispatchEvent(new Event("cartUpdated"));
+
   return response.data;
 };
 
@@ -30,5 +34,9 @@ export const removeFromCart = async (deviceId, productId) => {
   const response = await axios.delete(`${API_URL}/cart`, {
     data: { deviceId, productId },
   });
+
+  // Emitir evento cartUpdated
+  window.dispatchEvent(new Event("cartUpdated"));
+
   return response.data;
 };
