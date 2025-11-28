@@ -20,6 +20,33 @@ const ProductMaintenance = () => {
     fetchProducts();
   }, []);
 
+  const handleDelete = async (productId) => {
+    const confirmed = window.confirm('¿Seguro que quieres eliminar este producto?');
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`${API_URL}/products/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Error deleting product:', errText);
+        alert('No se pudo eliminar el producto. Revisa la consola.');
+        return;
+      }
+
+      // Remove from local state
+      setProducts((prev) => prev.filter((p) => p._id !== productId));
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      alert('Ocurrió un error al eliminar el producto.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +87,10 @@ const ProductMaintenance = () => {
                 >
                   Editar Producto
                 </button>
-                <button className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-all duration-300 font-medium transform hover:scale-105 mt-2">
+                <button
+                  onClick={() => handleDelete(product._id)}
+                  className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition-all duration-300 font-medium transform hover:scale-105 mt-2"
+                >
                   Eliminar Producto
                 </button>
               </div>

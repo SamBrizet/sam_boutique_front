@@ -202,8 +202,9 @@ const Home = () => {
                 </div>
                 
                 <h4 className="font-medium text-gray-800 mb-2 line-clamp-2 text-sm sm:text-base">
-                  {product.name}
+                  {product.title || "Producto sin nombre"}
                 </h4>
+               
                 
                 <div className="flex items-center space-x-2 mb-3 sm:mb-4">
                   <span className="text-lg sm:text-xl font-semibold text-gray-800">
