@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Heart, Star, Instagram, Facebook, Twitter } from 'lucide-react';
+import { Heart, Instagram, Facebook, Twitter } from 'lucide-react';
 import { toggleFavorite, loadFavorites } from '../store/favoritesSlice';
 import { API_URL } from '../constantes/constantes';
 import { addToCart, getCart } from "../api/cart";
@@ -146,20 +146,18 @@ const Home = () => {
             {products.map((product) => (
             <div
               key={product._id}
-              className="group bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-rose-200/50 hover:border-pink-300"
+              onClick={() => navigate(`/producto/detail/${product._id}`)}
+              className="group bg-white/0 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden border border-rose-200/0 hover:border-pink-300 h-[420px] sm:h-[460px] lg:h-[640px]"
             >
-              <div className="relative overflow-hidden">
-                <div
-                  onClick={() => navigate(`/producto/detail/${product._id}`)}
-                  className="cursor-pointer"
-                >
-                  <img
-                    src={product.images[0] || "https://via.placeholder.com/300"}
-                    alt={product.name}
-                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="absolute top-4 left-4 flex flex-col space-y-2">
+              <div className="relative h-full overflow-hidden">
+                <img
+                  src={product.images[0] || "https://via.placeholder.com/300"}
+                  alt={product.name}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 cursor-pointer"
+                />
+
+                {/* badges */}
+                <div className="absolute top-4 left-4 flex flex-col space-y-2 z-10">
                   {product.isNew && (
                     <span className="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
                       Nuevo
@@ -171,9 +169,11 @@ const Home = () => {
                     </span>
                   )}
                 </div>
+
+                {/* favorite button */}
                 <button
-                  onClick={() => handleToggleFavorite(product._id)}
-                  className="absolute top-4 right-4 p-2 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all duration-200 flex items-center justify-center"
+                  onClick={(e) => { e.stopPropagation(); handleToggleFavorite(product._id); }}
+                  className="absolute top-4 right-4 p-2 bg-white/90 rounded-full shadow-lg hover:bg-white transition-all duration-200 flex items-center justify-center z-10"
                 >
                   <Heart
                     className={`h-4 w-4 ${
@@ -183,60 +183,33 @@ const Home = () => {
                     }`}
                   />
                 </button>
-                 
-              </div>
 
-              <div className="p-4 sm:p-6">
-                <div className="flex items-center mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                        i < Math.floor(product.rating)
-                          ? 'text-amber-400 fill-current'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  ))}
-                  <span className="text-xs sm:text-sm text-gray-600 ml-2">({product.rating})</span>
-                </div>
-                
-                <h4 className="font-medium text-gray-800 mb-2 line-clamp-2 text-sm sm:text-base">
-                  {product.title || "Producto sin nombre"}
-                </h4>
-               
-                
-                <div className="flex items-center space-x-2 mb-3 sm:mb-4">
-                  <span className="text-lg sm:text-xl font-semibold text-gray-800">
-                    s/ {product.price}
-                  </span>
-                  {product.originalPrice && (
-                    <span className="text-xs sm:text-sm text-gray-500 line-through">
-                     s/ {product.originalPrice}
-                    </span>
-                  )}
-                </div>
+                {/* Overlay: title always visible, actions on hover */}
+                <div className="absolute inset-0 flex flex-col justify-end p-4 z-10">
+                  <div className="bg-gradient-to-t from-black/60 to-transparent p-3 rounded-t-lg">
+                    <h4 className="font-medium text-white mb-0 line-clamp-2 text-base sm:text-lg lg:text-xl">
+                      {product.title || "Producto sin nombre"}
+                    </h4>
+                  </div>
 
-                <div className="flex flex-wrap gap-1 sm:gap-2 mt-2">
-                  {product.category.map((cat) => (
-                    <span
-                      key={cat._id}
-                      className="bg-rose-100 text-rose-600 text-xs font-medium px-2 sm:px-3 py-1 rounded-full shadow-sm"
-                    >
-                      {cat.name}
-                    </span>
-                  ))}
+                  <div className="mt-2 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <div className="bg-white/90 backdrop-blur-sm p-3 rounded-lg flex items-center justify-between">
+                      <div>
+                        <span className="text-lg sm:text-xl font-semibold text-gray-800">s/ {product.price}</span>
+                        {product.originalPrice && (
+                          <div className="text-xs text-gray-500 line-through">s/ {product.originalPrice}</div>
+                        )}
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleAddToCart(product._id); }}
+                        disabled={addingToCart[product._id] || isProductInCart(product._id)}
+                        className={`ml-4 bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 px-4 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium ${addingToCart[product._id] || isProductInCart(product._id) ? "opacity-50 cursor-not-allowed" : ""}`}
+                      >
+                        {isProductInCart(product._id) ? "Ya en el carrito" : addingToCart[product._id] ? "Agregando..." : "Agregar"}
+                      </button>
+                    </div>
+                  </div>
                 </div>
-
-                <button
-                  onClick={() => handleAddToCart(product._id)}
-                  disabled={addingToCart[product._id] || isProductInCart(product._id)}
-                  className={`w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-2 sm:py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-300 font-medium transform hover:scale-105 mt-2 text-sm sm:text-base ${
-                    addingToCart[product._id] || isProductInCart(product._id) ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  {isProductInCart(product._id) ? "Ya en el carrito" : addingToCart[product._id] ? "Agregando..." : "Agregar al Carrito"}
-                </button>
               </div>
             </div>
             ))}

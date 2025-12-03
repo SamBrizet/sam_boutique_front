@@ -12,6 +12,8 @@ const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewIndex, setPreviewIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -106,7 +108,12 @@ const ProductDetail = () => {
             <img
               src={selectedImage}
               alt={product.title}
-              className="w-full h-64 sm:h-80 lg:h-[500px] object-cover transition-transform duration-500 hover:scale-105"
+              onClick={() => {
+                const idx = product.images ? product.images.indexOf(selectedImage) : 0;
+                setPreviewIndex(idx >= 0 ? idx : 0);
+                setPreviewOpen(true);
+              }}
+              className="w-full h-[420px] sm:h-[520px] lg:h-[800px] object-cover transition-transform duration-500 hover:scale-105 cursor-zoom-in"
             />
             <button
               onClick={() => handleToggleFavorite(product._id)}
@@ -130,9 +137,65 @@ const ProductDetail = () => {
                   selectedImage === img ? 'border-rose-500' : 'border-transparent'
                 }`}
                 onClick={() => setSelectedImage(img)}
+                onDoubleClick={() => { setPreviewIndex(index); setPreviewOpen(true); }}
               />
             ))}
           </div>
+
+          {/* Preview modal with carousel */}
+          {previewOpen && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+              onClick={() => setPreviewOpen(false)}
+            >
+              <div className="relative w-[95%] max-w-5xl max-h-[95%] p-4" onClick={(e) => e.stopPropagation()}>
+                <button
+                  onClick={() => setPreviewOpen(false)}
+                  aria-label="Cerrar preview"
+                  className="absolute -top-2 -right-2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 z-20"
+                >
+                  ✕
+                </button>
+
+                <div className="flex items-center justify-center">
+                  <button
+                    onClick={() => setPreviewIndex((i) => (i - 1 + product.images.length) % product.images.length)}
+                    className="p-3 text-white bg-black/40 rounded-full mr-4 hover:bg-black/60"
+                    aria-label="Anterior"
+                  >
+                    ‹
+                  </button>
+
+                  <img
+                    src={product.images[previewIndex]}
+                    alt={`${product.title} preview`}
+                    className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-lg"
+                  />
+
+                  <button
+                    onClick={() => setPreviewIndex((i) => (i + 1) % product.images.length)}
+                    className="p-3 text-white bg-black/40 rounded-full ml-4 hover:bg-black/60"
+                    aria-label="Siguiente"
+                  >
+                    ›
+                  </button>
+                </div>
+
+                {/* Thumbnails inside modal */}
+                <div className="mt-4 flex items-center justify-center gap-2 overflow-x-auto">
+                  {product.images.map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt={`thumb-${idx}`}
+                      onClick={() => setPreviewIndex(idx)}
+                      className={`h-20 w-20 object-cover rounded-md cursor-pointer border-2 ${previewIndex === idx ? 'border-rose-500' : 'border-transparent'}`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Información del producto */}
